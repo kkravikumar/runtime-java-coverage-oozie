@@ -12,25 +12,11 @@
 							
 		<structure name="Oozie Java Dynamic Coverage">
 			<classfiles>
-				<fileset dir="/Users/e046842/pclo/workspaces/pclo-workspace/runtime-java-coverage-oozie/target/classes"/>
-			</classfiles>
-			<classfiles>
-				<fileset dir="/Users/e046842/pclo/code/statement-rewards/billshrink-statement-rewards-offline-impl/target/classes"/>
-			</classfiles>
-			<classfiles>
-				<fileset dir="/Users/e046842/pclo/code/buxwatch/statementrewards/target/classes"/>
+				<fileset dir="<<REPLACE THIS WITH WORKSPACE PATH>>/runtime-java-coverage-oozie/target/classes"/>
 			</classfiles>
 			<sourcefiles encoding="UTF-8">
-				<fileset dir="/Users/e046842/pclo/workspaces/pclo-workspace/runtime-java-coverage-oozie/src/main/java"/>
+				<fileset dir="<<REPLACE THIS WITH WORKSPACE PATH>>/runtime-java-coverage-oozie/src/main/java"/>
 			</sourcefiles>
-			<sourcefiles encoding="UTF-8">
-				<fileset dir="/Users/e046842/pclo/code/statement-rewards/billshrink-statement-rewards-offline-impl/src/main/java"/>
-			</sourcefiles>
-			<sourcefiles encoding="UTF-8">
-				<fileset dir="/Users/e046842/pclo/code/buxwatch/statementrewards/src/main/java"/>
-			</sourcefiles>
-			
-			
 		</structure>
 							
 		<html destdir="report-2347"/>
