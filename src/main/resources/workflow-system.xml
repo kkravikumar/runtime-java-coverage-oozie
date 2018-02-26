@@ -1,0 +1,85 @@
+<workflow-app xmlns="uri:oozie:workflow:0.4" name="dynamic-coverage-system-workflow">
+    <parameters>
+        <property>
+            <name>jobTracker</name>
+        </property>
+        <property>
+            <name>nameNode</name>
+        </property>
+        <property>
+            <name>appPath</name>
+        </property>
+    </parameters>
+
+    <start to="run-mr-and-standalone" />
+
+    <fork name="run-mr-and-standalone">
+        <path start="java-mr-job" />
+        <path start="standalone-java" />
+    </fork>
+
+    <action name="java-mr-job">
+        <map-reduce>
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <prepare>
+                <delete path="${appPath}/data/output" />
+            </prepare>
+            <configuration>
+
+                <property>
+                    <name>mapred.mapper.new-api</name>
+                    <value>true</value>
+                </property>
+                <property>
+                    <name>mapred.reducer.new-api</name>
+                    <value>true</value>
+                </property>
+
+                <property>
+                    <name>mapreduce.output.lazyoutputformat.outputformat</name>
+                    <value>org.apache.hadoop.mapreduce.lib.output.TextOutputFormat
+                    </value>
+                </property>
+
+                <property>
+                    <name>mapreduce.map.class</name>
+                    <value>com.ravik.oozie.runtime.coverage.mr.SampleMapper</value>
+                </property>
+                <property>
+                    <name>mapreduce.reduce.class</name>
+                    <value>com.ravik.oozie.runtime.coverage.mr.SampleReducer</value>
+                </property>
+                <property>
+                    <name>mapred.input.dir</name>
+                    <value>${appPath}/data/input</value>
+                </property>
+                <property>
+                    <name>mapred.output.dir</name>
+                    <value>${appPath}/data/output</value>
+                </property>
+            </configuration>
+        </map-reduce>
+        <ok to="wait-for-completion-join" />
+        <error to="fail" />
+    </action>
+
+    <action name="standalone-java">
+        <java>
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <main-class>com.ravik.oozie.runtime.coverage.StandaloneApp</main-class>
+        </java>
+        <ok to="wait-for-completion-join" />
+        <error to="fail" />
+    </action>
+
+    <join name="wait-for-completion-join" to="success" />
+
+    <kill name="fail">
+        <message>Dynamic Coverage Map-Reduce job failed!</message>
+    </kill>
+
+    <end name="success" />
+
+</workflow-app>
